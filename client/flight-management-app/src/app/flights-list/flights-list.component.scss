@@ -1,0 +1,38 @@
+.mat-elevation-z8 {
+  margin: 20px;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+}
+
+.mat-cell {
+  padding: 16px;
+}
+
+table {
+  width: 100%;
+}
+.malfunction {
+  background-color: red;
+  color: white;  /* Optional: to make text more readable */
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px; /* Adjust margin as needed */
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%; /* Adjust width of the filter row */
+  margin-bottom: 10px; /* Adjust margin between filter rows */
+}
+
+.filter-field {
+  width: 30%; /* Adjust width of each filter input */
+}

@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>Edit Flight</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Flight Number</mat-label>
+    <input matInput [(ngModel)]="data.flightNumber" disabled>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Takeoff Airport</mat-label>
+    <mat-select [(ngModel)]="data.takeoffAirport">
+      <mat-option *ngFor="let airport of filteredAirports |async" [value]="airport.airportCode">
+        {{airport.airportCode}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>
+      <input matInput placeholder="Filter airports" [formControl]="airportFilterControl">
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Landing Airport</mat-label>
+    <mat-select [(ngModel)]="data.landingAirport">
+      <mat-option *ngFor="let airport of filteredAirports |async" [value]="airport.airportCode">
+        {{airport.airportCode}}
+      </mat-option>
+    </mat-select>
+    <mat-hint>
+      <input matInput placeholder="Filter airports" [formControl]="airportFilterControl">
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select [(ngModel)]="data.status">
+      <mat-option value="hangar">Hangar</mat-option>
+      <mat-option value="airborne">Airborne</mat-option>
+      <mat-option value="malfunction">Malfunction</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Takeoff Time</mat-label>
+    <input matInput [(ngModel)]="data.takeoffTime" type="datetime-local">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Landing Time</mat-label>
+    <input matInput [(ngModel)]="data.landingTime" type="datetime-local">
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data">Save</button>
+</div>
