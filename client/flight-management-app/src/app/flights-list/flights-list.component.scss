@@ -36,3 +36,19 @@ table {
 .filter-field {
   width: 30%; /* Adjust width of each filter input */
 }
+
+@keyframes flicker {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.flicker {
+  animation: flicker 1s infinite;
+}

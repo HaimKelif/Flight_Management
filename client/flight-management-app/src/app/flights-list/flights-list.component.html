@@ -20,54 +20,57 @@
       <button mat-raised-button color="primary" (click)="applyFilter()">Search</button>
     </div>
   </div>
+
   <table mat-table [dataSource]="flights" class="mat-elevation-z8">
 
     <!-- Flight Number Column -->
     <ng-container matColumnDef="flightNumber">
       <th mat-header-cell *matHeaderCellDef> Flight Number </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.flightNumber}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.flightNumber}} </td>
     </ng-container>
 
     <!-- Takeoff Airport Column -->
     <ng-container matColumnDef="takeoffAirport">
       <th mat-header-cell *matHeaderCellDef> Takeoff Airport </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.takeoffAirport}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.takeoffAirport}} </td>
     </ng-container>
 
     <!-- Landing Airport Column -->
     <ng-container matColumnDef="landingAirport">
       <th mat-header-cell *matHeaderCellDef> Landing Airport </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.landingAirport}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.landingAirport}} </td>
     </ng-container>
 
-    <!-- Delay Time Column -->
-    <ng-container matColumnDef="DelayTime">
-      <th mat-header-cell *matHeaderCellDef> Delay Time </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.delayMinutes}} </td>
-    </ng-container>
+
 
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> Status </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.status}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.status}} </td>
     </ng-container>
 
     <!-- Takeoff Time Column -->
     <ng-container matColumnDef="takeoffTime">
       <th mat-header-cell *matHeaderCellDef> Takeoff Time </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.takeoffTime | date:'short'}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.takeoffTime | date:'short'}} </td>
     </ng-container>
 
     <!-- Landing Time Column -->
     <ng-container matColumnDef="landingTime">
       <th mat-header-cell *matHeaderCellDef> Landing Time </th>
-      <td mat-cell *matCellDef="let flight"> {{flight.landingTime | date:'short'}} </td>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.landingTime | date:'short'}} </td>
+    </ng-container>
+
+    <!-- Delay Time Column -->
+    <ng-container matColumnDef="DelayTime">
+      <th mat-header-cell *matHeaderCellDef> Delay Time </th>
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}"> {{flight.delayMinutes}} (Minutes) </td>
     </ng-container>
 
      <!-- Edit Button Column -->
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef> Edit </th>
-      <td mat-cell *matCellDef="let flight">
+      <td mat-cell *matCellDef="let flight" [ngClass]="{'flicker': flight.flightNumber == flickedFlight}">
         <button mat-button (click)="editFlight(flight)">Edit</button>
       </td>
     </ng-container>

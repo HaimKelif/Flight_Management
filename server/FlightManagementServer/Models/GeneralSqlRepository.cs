@@ -2,8 +2,6 @@
 using FlightManagementServer.Models;
 using Microsoft.AspNetCore.SignalR;
 using static FlightManagementServer.Models.DBEntities;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
 
 namespace FlightManagementServer.Models
 {
@@ -78,7 +76,7 @@ public class GeneralSqlRepository : BaseRepository, IGeneralRepository
         }
         catch (Exception ex)
         {
-            _logger.LogInformation(" generalSQLRepository GetAirports: " + ex.Message.ToString() + " Ex: " + ex.ToString());
+            _logger.LogInformation(" generalSQLRepository GetFlights: " + ex.Message.ToString() + " Ex: " + ex.ToString());
             base.CloseConnection();
             return null;
         }

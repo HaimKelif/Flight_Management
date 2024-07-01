@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using System.Collections.Generic;
 using static FlightManagementServer.Models.DBEntities;
 
 namespace FlightManagementServer.Controllers

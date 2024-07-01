@@ -5,46 +5,33 @@ using System.Data.SqlClient;
 
 namespace FlightManagementServer.Models
 {
-    /// <summary>
-    /// Contains common base repository functions. Can't be instantiated.
-    /// Should be inherited by every repository class.
-    /// /// </summary>
+    
     public abstract class BaseRepository
     {
-        #region ==========BASICS=====================
 
         private readonly SqlConnection _connection;
         private SqlTransaction _transaction;
         private static readonly ILog Log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        /// <summary>
-        /// Connection getter
-        /// </summary>
+        
         protected SqlConnection Connection
         {
             get { return _connection; }
         }
 
-        /// <summary>
-        /// Transaction getter
-        /// </summary>
+        
         protected SqlTransaction Transaction
         {
             get { return _transaction; }
         }
 
-        /// <summary>
-        /// Initializes the connection using ninject
-        /// </summary>
-        /// <param name="connection"></param>
+        
         protected BaseRepository(SqlConnection connection)
         {
             this._connection = connection;
         }
 
-        ///  <summary>
-        /// Open the connection.
-        /// </summary>
+        
         public void OpenConnection()
         {
             try
@@ -66,10 +53,7 @@ namespace FlightManagementServer.Models
 
         }
 
-        /// <summary>
-        /// Check whether the connection is closed
-        /// </summary>
-        /// <returns></returns>
+        
         private bool IsConnectionClosed()
         {
             if ((_connection == null) || (_connection.State == ConnectionState.Closed))
@@ -78,9 +62,7 @@ namespace FlightManagementServer.Models
             return false;
         }
 
-        ///  <summary>
-        /// Close the connection.
-        /// </summary>
+        
         public void CloseConnection()
         {
             if (_connection == null) return;
@@ -88,9 +70,7 @@ namespace FlightManagementServer.Models
                 _connection.Close();
         }
 
-        /// <summary>
-        /// Begins a new transaction. To begin a transaction the connection should be opened?
-        /// </summary>
+        
         public void BeginTransaction()
         {
             if (IsConnectionClosed())
@@ -100,9 +80,7 @@ namespace FlightManagementServer.Models
 
         }
 
-        /// <summary>
-        /// Commits the current trunsaction
-        /// </summary>
+        
         public void CommitTransaction()
         {
             if (_transaction != null)
@@ -111,9 +89,7 @@ namespace FlightManagementServer.Models
             CloseConnection();
         }
 
-        /// <summary>
-        /// Rollbacks the current trunsaction
-        /// </summary>
+        
         public void RollbackTransaction()
         {
             if (_transaction != null)
@@ -122,10 +98,7 @@ namespace FlightManagementServer.Models
             CloseConnection();
         }
 
-        /// <summary>
-        /// struct for passing params from specific entity repository function to base repository function.
-        /// Base repository functions biulds command params according the Param data
-        /// </summary>
+
         public struct Param
         {
             private readonly string _name;
@@ -147,6 +120,7 @@ namespace FlightManagementServer.Models
             public object Value { get { return _value; } }
             public ParameterDirection Direction { get { return _dir; } }
         }
+
 
         protected SqlDataReader GetData(string spName, List<Param> paramsList)
         {
@@ -194,9 +168,7 @@ namespace FlightManagementServer.Models
 
         }
 
-        #endregion
 
-        #region ==========SAVE FUNCTIONS==============  
         protected string SaveData<TEntity>(TEntity entity, string spName) where TEntity : BaseEntity
         {
             try
@@ -226,15 +198,7 @@ namespace FlightManagementServer.Models
             }
         }
 
-        #endregion
 
-        #region ==========GENERAL FUNCTIONS==========
-
-        /// <summary>
-        /// Returns the SqlDbType of param accordingly to its value.
-        /// </summary>
-        /// <param name="param">Parameter whose value should be checked</param>
-        /// <returns>SqlDbType of the param</returns>
         private static SqlDbType GetParamSqlDbType(Param param)
         {
             Type paramType = param.Value.GetType();
@@ -260,30 +224,6 @@ namespace FlightManagementServer.Models
 
             return returnedType;
         }
-
-        #endregion
-
-        #region ==========CHECK PERMISSIONS FUNCTIONS==========
-
-        /// <summary>
-        /// Function checks whether the current user has write permission to an object of typeToCheck type.
-        /// Used in SAVE functions.
-        /// </summary>
-        /// <param name="typeToCheck"></param>
-        /// <returns>true - if the user has the permissions, otherwise false</returns>
-        /// <history>Olga - 18/11/2015</history>
-        
-
-        /// <summary>
-        /// Function checks whether the current user has read permission to an object of typeToCheck type.
-        /// Used in GET functions.
-        /// </summary>
-        /// <param name="typeToCheck"></param>
-        /// <returns>true - if the user has the permissions, otherwise false</returns>
-        /// <history>Olga - 18/11/2015</history>
-        
-
-        #endregion
     }
 }
 

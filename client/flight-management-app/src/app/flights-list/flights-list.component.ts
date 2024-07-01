@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2  } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FlightService } from '../flight.service';
 import { Flight, FilterFlight } from '../flight.model';
@@ -14,24 +14,22 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class FlightsListComponent implements OnInit {
   flights: MatTableDataSource<Flight> = new MatTableDataSource<Flight>();
-  //flights: Flight[] = [];
-  displayedColumns: string[] = ['flightNumber', 'takeoffAirport', 'landingAirport', 'status', 'takeoffTime', 'landingTime', 'DelayTime', 'edit'];
+  flickedFlight: string = '';
+  displayedColumns: string[] = ['flightNumber', 'takeoffAirport', 'landingAirport', 'status',
+     'takeoffTime', 'landingTime', 'DelayTime', 'edit'];
   filter = {} as FilterFlight;
-  constructor(private flightService: FlightService, public dialog: MatDialog, private signalRService: SignalRService) { }
+  constructor(private flightService: FlightService, public dialog: MatDialog,
+     private signalRService: SignalRService, private renderer: Renderer2) { }
 
   ngOnInit(): void {
     this.getFlights();
     this.signalRService.flightUpdated$.subscribe(flight => {
-
       if (flight) {
-
-        // Update your flights array with the new flight data
         const index = this.flights.data.findIndex(f => f.flightNumber === flight.flightNumber);
-
         if (index > -1) {
-          console.log("id: " + flight.flightNumber + ", index: " + index + ", delay: " + flight.delayMinutes)
           this.flights.data[index] = flight;
-          console.log("id: " + this.flights.data[index].flightNumber + ", index: " + index + ", delay: " + this.flights.data[index].delayMinutes)
+          this.flickedFlight = this.flights.data[index].flightNumber
+          //this.triggerFlickerEffect(flight.flightNumber);
         } else {
           if((this.filter.FlightNumber === '' || this.filter.FlightNumber === 'null'
              || this.filter.FlightNumber == flight.flightNumber)
@@ -40,6 +38,7 @@ export class FlightsListComponent implements OnInit {
              && (this.filter.TakeoffAirport === '' || this.filter.TakeoffAirport === 'null'
              || this.filter.TakeoffAirport == flight.TakeoffAirport)){
             this.flights.data.push(flight);
+            this.flickedFlight = flight.flightNumber;
           }
         }
         this.flights.data = [...this.flights.data];
@@ -47,6 +46,19 @@ export class FlightsListComponent implements OnInit {
     });
 
   }
+
+
+  // private triggerFlickerEffect(flightNumber: string): void {
+  //   console.log("id: " + flightNumber)
+  //   const flightElement = document.getElementById(`flight-${flightNumber}`);
+  //   if (flightElement) {
+  //     console.log("flightElement: " + flightNumber)
+  //     this.renderer.addClass(flightElement, 'flicker');
+  //     // setTimeout(() => {
+  //     //   this.renderer.removeClass(flightElement, 'flicker');
+  //     // }, 10000); // 10 seconds
+  //   }
+  // }
 
 
 
