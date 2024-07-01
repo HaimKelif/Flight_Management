@@ -20,7 +20,9 @@ namespace FlightManagementServer.Models
             [DBAttribute("TAKEOFFTIME")]
             public DateTime TakeoffTime { get; set; }
             [DBAttribute("LANDINGTIME")]
-            public DateTime LandingTime { get; set; }            
+            public DateTime LandingTime { get; set; }
+            [DBAttribute("DELAYMINUTES ")]
+            public int DelayMinutes { get; set; }
         }
 
         [DBAttribute("AIRPORT")]

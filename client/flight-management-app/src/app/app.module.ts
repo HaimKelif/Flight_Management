@@ -14,7 +14,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlightsListComponent } from './flights-list/flights-list.component';
 import { EditFlightDialogComponent } from './edit-flight-dialog/edit-flight-dialog.component';
-import { io, Socket } from 'socket.io-client';
+
 
 
 

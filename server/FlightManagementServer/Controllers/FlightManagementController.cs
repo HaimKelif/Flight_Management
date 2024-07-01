@@ -14,17 +14,14 @@ namespace FlightManagementServer.Controllers
         private readonly ILogger<FlightManagementController> _logger;
         private readonly IConfiguration iconfiguration;
         private readonly GeneralSqlRepository _generalRepository;
-        private readonly IHubContext<FlightHub> _hubContext;
 
         public FlightManagementController(
             ILogger<FlightManagementController> logger,
             IConfiguration config,
-            IHubContext<FlightHub> hubContext,
             GeneralSqlRepository generalRepository)
         {
             _logger = logger;
-            iconfiguration = config;
-            _hubContext = hubContext;
+            iconfiguration = config;  
             _generalRepository = generalRepository;
         }
 
@@ -49,16 +46,10 @@ namespace FlightManagementServer.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("saveflight")]
-        public bool SaveFlight(Flight flight)
+        public string SaveFlight(Flight flight)
         {
             _logger.LogInformation("saveflight endpoint hit");
-            bool result = _generalRepository.SaveFlight(flight);
-
-            if (result)
-            {
-                // Notify clients of the updated flight
-                _hubContext.Clients.All.SendAsync("flightUpdated", flight);
-            }
+            string result = _generalRepository.SaveFlight(flight);
 
             return result;
         }

@@ -1,20 +1,28 @@
 import { Injectable } from '@angular/core';
-import { io, Socket } from 'socket.io-client';
-import { Observable } from 'rxjs';
+import * as signalR from '@microsoft/signalr';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
-  private socket: Socket;
+export class SignalRService {
+  private hubConnection: signalR.HubConnection;
+  private flightUpdatedSubject = new BehaviorSubject<any>(null);
+  public flightUpdated$ = this.flightUpdatedSubject.asObservable();
 
   constructor() {
-    this.socket = io('https://localhost:7241/'); // Replace with your server URL
-  }
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl('https://localhost:7241/flightHub')
+      .build();
 
-  public onEvent(event: string): Observable<any> {
-    return new Observable<any>(observer => {
-      this.socket.on(event, data => observer.next(data));
+    this.hubConnection.on('flightUpdated', (flight) => {
+      this.flightUpdatedSubject.next(flight);
     });
+
+    this.hubConnection.start().catch(err => console.error(err.toString()));
   }
 }
+
+
+
+

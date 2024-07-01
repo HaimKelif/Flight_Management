@@ -1,11 +1,12 @@
-CREATE PROCEDURE SaveNewOrUpdateFlight
-@NEW_ID INT OUTPUT,
-    @FlightNumber VARCHAR(10) = NULL,
+ALTER PROCEDURE SaveNewOrUpdateFlight
+    @OUT VARCHAR(10) OUTPUT,
+    @FlightNumber VARCHAR(10) = null,
     @TakeoffAirport VARCHAR(10),
     @LandingAirport VARCHAR(10),
     @Status VARCHAR(11),
     @TakeoffTime DATETIME,
-    @LandingTime DATETIME
+    @LandingTime DATETIME,
+	@DELAYMINUTES int
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -34,6 +35,7 @@ BEGIN
             SET @Counter = @Counter + 1;
         END
     END
+	
 
     -- Check if the flight number already exists
     IF EXISTS (SELECT 1 FROM Flights WHERE FlightNumber = @FlightNumber)
@@ -44,21 +46,24 @@ BEGIN
             LandingAirport = @LandingAirport,
             Status = @Status,
             TakeoffTime = @TakeoffTime,
-            LandingTime = @LandingTime
+            LandingTime = @LandingTime,
+			DELAYMINUTES = @DELAYMINUTES
         WHERE FlightNumber = @FlightNumber;
 
         -- Return success message for update
-        SELECT 'Flight updated successfully.' AS Message, @FlightNumber AS FlightNumber;
+        
     END
     ELSE
     BEGIN
         -- Insert the new flight record
-        INSERT INTO Flights (FlightNumber, TakeoffAirport, LandingAirport, Status, TakeoffTime, LandingTime)
-        VALUES (@FlightNumber, @TakeoffAirport, @LandingAirport, @Status, @TakeoffTime, @LandingTime);
+        INSERT INTO Flights (FlightNumber, TakeoffAirport, LandingAirport, Status, TakeoffTime, LandingTime, DELAYMINUTES)
+        VALUES (@FlightNumber, @TakeoffAirport, @LandingAirport, @Status, @TakeoffTime, @LandingTime, @DELAYMINUTES);
 
         -- Return success message for insert
-        SELECT 'Flight added successfully.' AS Message, @FlightNumber AS FlightNumber;
+        
     END
+	set @OUT = @FlightNumber
+	--SELECT 'Flight updated successfully.' AS Message, @GeneratedFlightNumber AS FlightNumber;
 
-	SET @NEW_ID = SCOPE_IDENTITY();
+
 END

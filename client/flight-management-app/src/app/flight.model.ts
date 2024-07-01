@@ -5,6 +5,7 @@ export class Flight {
   status: string = '';
   takeoffTime: Date = new Date();
   landingTime: Date = new Date();
+  delayMinutes: number = 0;
 }
 
 export class FilterFlight {

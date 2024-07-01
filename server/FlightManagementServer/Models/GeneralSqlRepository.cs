@@ -1,6 +1,9 @@
 ﻿using System.Data.SqlClient;
 using FlightManagementServer.Models;
+using Microsoft.AspNetCore.SignalR;
 using static FlightManagementServer.Models.DBEntities;
+using Microsoft.AspNetCore.SignalR;
+using System.Collections.Generic;
 
 namespace FlightManagementServer.Models
 {
@@ -8,7 +11,7 @@ namespace FlightManagementServer.Models
     {
         IList<Flight> GetFlights(FilterFlight filter);
         IList<Airport> GetAirports();
-        bool SaveFlight(Flight flight);
+        string SaveFlight(Flight flight);
     }
 
 }
@@ -16,26 +19,35 @@ namespace FlightManagementServer.Models
 public class GeneralSqlRepository : BaseRepository, IGeneralRepository
 {
     private readonly ILogger<GeneralSqlRepository> _logger;
+    private readonly IHubContext<FlightHub> _hubContext;
+    
 
-    public GeneralSqlRepository(SqlConnection connection) : base(connection)
+    public GeneralSqlRepository(SqlConnection connection, IHubContext<FlightHub> hubContext) : base(connection)
     {
         var factory = LoggerFactory.Create(b => b.AddConsole());
-            _logger = factory.CreateLogger<GeneralSqlRepository>();
+        _hubContext = hubContext;
+        _logger = factory.CreateLogger<GeneralSqlRepository>();
     }
 
-    public bool SaveFlight(Flight flight)
+    public string SaveFlight(Flight flight)
     {
         try
         {
-            int result = 0;
+            string result;
             result = SaveData(flight, "SaveNewOrUpdateFlight");
-            return true;
+            if (result != null)
+            {
+                flight.FlightNumber = result;
+                // Notify clients of the updated flight
+                _hubContext.Clients.All.SendAsync("flightUpdated", flight);
+            }
+            return result;
         }
         catch (Exception ex)
         {
             _logger.LogInformation(" generalSQLRepository SaveFlight: " + ex.Message.ToString() + " Ex: " + ex.ToString());
             base.CloseConnection();
-            return false;
+            return null;
         }
         finally
         {
@@ -78,13 +90,12 @@ public class GeneralSqlRepository : BaseRepository, IGeneralRepository
 
     public IList<Airport> GetAirports()
     {
+        IList<Airport> Airports = new List<Airport>();
         try
         {
-            IList<Airport> Airports;
             List<Param> paramList = new List<Param> {};
             using (SqlDataReader rdr = GetData("GetAllAirports", paramList))
             {
-                Airports = new List<Airport>();
                 while (rdr.Read())
                 {
                     var Airport = new Airport();
@@ -98,7 +109,7 @@ public class GeneralSqlRepository : BaseRepository, IGeneralRepository
         {
             _logger.LogInformation(" generalSQLRepository GetAirports: " + ex.Message.ToString() + " Ex: " + ex.ToString());
             base.CloseConnection();
-            return null;
+            return Airports;
         }
         finally
         {

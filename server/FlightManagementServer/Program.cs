@@ -1,3 +1,10 @@
+using Microsoft.AspNetCore.SignalR;
+using System.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+
+
 IConfiguration Configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json")
                             .Build(); 
@@ -8,14 +15,23 @@ builder.Services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =
 {
     builder.WithOrigins(Configuration["cors:allowedHosts"]).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
 }));
-// Add services to the container.
+
 
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+//builder.Services.AddScoped<IHostedService, FlightUpdateService>();
+builder.Services.AddScoped<SqlConnection>(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    return new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+});
 
+builder.Services.AddScoped<GeneralSqlRepository>();
+builder.Services.AddHostedService<FlightUpdateService>();
+
+builder.Services.AddSignalR();
 var app = builder.Build();
 app.UseCors("ApiCorsPolicy");
 
@@ -28,13 +44,14 @@ if (app.Environment.IsDevelopment())
 
 
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseRouting();
+app.MapHub<FlightHub>("/flightHub");
 
 
 app.Run();
