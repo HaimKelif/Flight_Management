@@ -1,23 +1,23 @@
-export class Flight {
-  flightNumber: string = '';
-  takeoffAirport: string = '';
-  landingAirport: string = '';
-  status: string = '';
-  takeoffTime: Date = new Date();
-  landingTime: Date = new Date();
-  delayMinutes: number = 0;
+export interface  Flight {
+  flightNumber: string;
+  takeoffAirport: string;
+  landingAirport: string;
+  status: string;
+  takeoffTime: Date;
+  landingTime: Date;
+  delayMinutes: number;
 }
 
-export class FilterFlight {
-  FlightNumber: string = '';
-  TakeoffAirport: string = '';
-  LandingAirport: string = '';
+export interface  FilterFlight {
+  FlightNumber: string;
+  TakeoffAirport: string;
+  LandingAirport: string;
 }
 
 
-export class Airport {
-  airportCode: string = '';
-  airportName: string = '';
+export interface  Airport {
+  airportCode: string;
+  airportName: string;
 }
 
 

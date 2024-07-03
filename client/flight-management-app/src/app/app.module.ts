@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlightsListComponent } from './flights-list/flights-list.component';
 import { EditFlightDialogComponent } from './edit-flight-dialog/edit-flight-dialog.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 
@@ -42,7 +43,8 @@ import { EditFlightDialogComponent } from './edit-flight-dialog/edit-flight-dial
     MatDialogModule,
     MatFormFieldModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

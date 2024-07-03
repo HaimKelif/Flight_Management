@@ -18,7 +18,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddScoped<IHostedService, FlightUpdateService>();
 builder.Services.AddScoped<SqlConnection>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
@@ -26,7 +25,9 @@ builder.Services.AddScoped<SqlConnection>(provider =>
 });
 
 builder.Services.AddScoped<GeneralSqlRepository>();
+
 builder.Services.AddHostedService<FlightUpdateService>();
+
 
 builder.Services.AddSignalR();
 var app = builder.Build();

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
+import { Flight, } from './flight.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SignalRService {
   private hubConnection: signalR.HubConnection;
-  private flightUpdatedSubject = new BehaviorSubject<any>(null);
+  private flightUpdatedSubject = new BehaviorSubject<Flight | null>(null);
   public flightUpdated$ = this.flightUpdatedSubject.asObservable();
 
   constructor() {

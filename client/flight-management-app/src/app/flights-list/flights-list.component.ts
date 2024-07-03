@@ -34,9 +34,9 @@ export class FlightsListComponent implements OnInit {
           if((this.filter.FlightNumber === '' || this.filter.FlightNumber === 'null'
              || this.filter.FlightNumber == flight.flightNumber)
              && (this.filter.LandingAirport === '' || this.filter.LandingAirport === 'null'
-             || this.filter.LandingAirport == flight.LandingAirport)
+             || this.filter.LandingAirport == flight.landingAirport)
              && (this.filter.TakeoffAirport === '' || this.filter.TakeoffAirport === 'null'
-             || this.filter.TakeoffAirport == flight.TakeoffAirport)){
+             || this.filter.TakeoffAirport == flight.takeoffAirport)){
             this.flights.data.push(flight);
             this.flickedFlight = flight.flightNumber;
           }
@@ -46,21 +46,6 @@ export class FlightsListComponent implements OnInit {
     });
 
   }
-
-
-  // private triggerFlickerEffect(flightNumber: string): void {
-  //   console.log("id: " + flightNumber)
-  //   const flightElement = document.getElementById(`flight-${flightNumber}`);
-  //   if (flightElement) {
-  //     console.log("flightElement: " + flightNumber)
-  //     this.renderer.addClass(flightElement, 'flicker');
-  //     // setTimeout(() => {
-  //     //   this.renderer.removeClass(flightElement, 'flicker');
-  //     // }, 10000); // 10 seconds
-  //   }
-  // }
-
-
 
   getFlights(): void {
     this.flightService.getAllFlights(this.filter).subscribe(

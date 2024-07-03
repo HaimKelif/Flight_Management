@@ -5,16 +5,18 @@ public class FlightUpdateService : BackgroundService
     private readonly ILogger<FlightUpdateService> _logger;
     private readonly Random _random = new Random();
     private readonly IServiceScopeFactory _scopeFactory;
+    private bool UpdateFlights = false;
 
-    public FlightUpdateService(ILogger<FlightUpdateService> logger, IServiceScopeFactory scopeFactory)
+    public FlightUpdateService(IConfiguration iconfiguration, ILogger<FlightUpdateService> logger, IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
+        UpdateFlights = bool.Parse(iconfiguration["FlightUpdateService:UpdateFlights"]);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested && UpdateFlights)
         {
             await Task.Delay(300, stoppingToken);
 

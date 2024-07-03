@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Flight, Airport } from '../flight.model';
 import { FlightService } from '../flight.service';
 import { Observable } from 'rxjs';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 
 @Component({
@@ -14,7 +14,8 @@ import { startWith, map } from 'rxjs/operators';
 export class EditFlightDialogComponent implements OnInit {
   airports: Airport[] = [];
   filteredAirports!: Observable<Airport[]>;
-  airportFilterControl = new FormControl('');
+  tackoffFilterControl = new FormControl('');
+  landingFilterControl = new FormControl('');
 
   constructor(
     public dialogRef: MatDialogRef<EditFlightDialogComponent>,
@@ -25,7 +26,12 @@ export class EditFlightDialogComponent implements OnInit {
 
     this.flightService.getAirports().subscribe(airports => {
       this.airports = airports;
-      this.filteredAirports = this.airportFilterControl.valueChanges
+      this.filteredAirports = this.tackoffFilterControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filterAirports(value || ''))
+      );
+      this.filteredAirports = this.landingFilterControl.valueChanges
       .pipe(
         startWith(''),
         map(value => this._filterAirports(value || ''))
