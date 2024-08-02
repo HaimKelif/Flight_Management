@@ -13,7 +13,8 @@ import { startWith, map } from 'rxjs/operators';
 })
 export class EditFlightDialogComponent implements OnInit {
   airports: Airport[] = [];
-  filteredAirports!: Observable<Airport[]>;
+  filteredTackoffAirports!: Observable<Airport[]>;
+  filteredLandingAirports!: Observable<Airport[]>;
   tackoffFilterControl = new FormControl('');
   landingFilterControl = new FormControl('');
 
@@ -26,21 +27,28 @@ export class EditFlightDialogComponent implements OnInit {
 
     this.flightService.getAirports().subscribe(airports => {
       this.airports = airports;
-      this.filteredAirports = this.tackoffFilterControl.valueChanges
+      this.filteredTackoffAirports = this.tackoffFilterControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filterAirports(value || ''))
+        map(value => this._filterTackoffAirports(value || ''))
       );
-      this.filteredAirports = this.landingFilterControl.valueChanges
+      this.filteredLandingAirports = this.landingFilterControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filterAirports(value || ''))
+        map(value => this._filterLandingAirports(value || ''))
       );
     });
 
   }
 
-  private _filterAirports(value: string): Airport[] {
+  private _filterTackoffAirports(value: string): Airport[] {
+    const filterValue = value.toLowerCase();
+    return this.airports.filter(airport =>
+      airport.airportCode.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterLandingAirports(value: string): Airport[] {
     const filterValue = value.toLowerCase();
     return this.airports.filter(airport =>
       airport.airportCode.toLowerCase().includes(filterValue)

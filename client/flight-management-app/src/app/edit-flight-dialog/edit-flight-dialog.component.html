@@ -9,7 +9,7 @@
     <mat-label>Takeoff Airport</mat-label>
     <input type="text" [(ngModel)]="data.takeoffAirport" matInput [formControl]="tackoffFilterControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let airport of filteredAirports | async" [value]="airport.airportCode">
+      <mat-option *ngFor="let airport of filteredTackoffAirports | async" [value]="airport.airportCode">
         {{airport.airportCode}}
       </mat-option>
     </mat-autocomplete>
@@ -19,7 +19,7 @@
     <mat-label>Landing Airport</mat-label>
     <input type="text" [(ngModel)]="data.landingAirport" matInput [formControl]="landingFilterControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let airport of filteredAirports | async" [value]="airport.airportCode">
+      <mat-option *ngFor="let airport of filteredLandingAirports | async" [value]="airport.airportCode">
         {{airport.airportCode}}
       </mat-option>
     </mat-autocomplete>

@@ -19,14 +19,15 @@ export class FlightService {
   constructor(private http: HttpClient, private signalRService: SignalRService) {}
 
   getAllFlights(): void {
-    this.http.post<Flight[]>(`${this.apiUrl}/getflights`, this.filter).subscribe(
-      flights => {
+    this.http.post<Flight[]>(`${this.apiUrl}/getflights`, this.filter).subscribe({
+     next: flights => {
         this.flightsSubject.next(flights);
       },
-      error => {
+      error:error => {
         console.error('Error loading flights:', error);
       }
-    );
+    }
+  );
   }
 
   createFlight(flight: Flight): Observable<any> {
